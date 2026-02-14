@@ -173,6 +173,9 @@ vim.o.wrap = false
 -- Exit to normal mode.
 vim.keymap.set('i', 'jk', '<Esc>')
 
+-- Prevent `*` from going to the next match (by jumping back to the previousone).
+vim.keymap.set('n', '*', ':keepjumps normal! *N<CR>', { silent = true })
+
 -- Clear highlights on search when pressing `\` in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '\\', '<cmd>nohlsearch<CR>')
