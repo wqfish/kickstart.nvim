@@ -213,6 +213,9 @@ vim.keymap.set('n', '<C-k>', ':RustFmt<CR>', { noremap = true, silent = true })
 -- Visual-mode: selection only
 vim.keymap.set('v', '<C-k>', ':RustFmt<CR>', { noremap = true, silent = true })
 
+-- Disable <C-u> since I often hit it accidentally when using <C-y> for auto-completion.
+vim.keymap.set('i', '<C-u>', '<Nop>', { noremap = true, silent = true })
+
 local mux_with_g = function(key)
   local gkey = 'g' .. key
   return function()
