@@ -292,6 +292,11 @@ require('lazy').setup({
     'mrcjkb/rustaceanvim',
     version = '^6', -- Recommended
     lazy = false, -- This plugin is already lazy
+    init = function()
+      vim.g.rustaceanvim = {
+        server = { settings = { ['rust-analyzer'] = { check = { command = 'check' } } } },
+      }
+    end,
   },
 
   -- Alternatively, use `config = function() ... end` for full control over the configuration.
