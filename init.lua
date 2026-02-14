@@ -206,10 +206,10 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
--- RustFmt key mapping.
+-- RustFmt key mapping (also configure it to use nightly).
+vim.g.rustfmt_command = 'rustfmt +nightly'
 -- Normal-mode: whole file
 vim.keymap.set('n', '<C-k>', ':RustFmt<CR>', { noremap = true, silent = true })
-
 -- Visual-mode: selection only
 vim.keymap.set('v', '<C-k>', ':RustFmt<CR>', { noremap = true, silent = true })
 
