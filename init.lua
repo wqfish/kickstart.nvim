@@ -445,9 +445,49 @@ require('lazy').setup({
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
+
+      local function project_root()
+        -- Prefer LSP root if available
+        local clients = vim.lsp.get_clients { bufnr = 0 }
+        for _, c in ipairs(clients) do
+          local ws = c.config and c.config.root_dir
+          if ws and #ws > 0 then
+            return ws
+          end
+        end
+        -- Fallback: find nearest root markers.
+        local root = vim.fs.dirname(vim.fs.find({
+          '.git',
+          '.sl',
+        }, { upward = true })[1])
+        return root or vim.loop.cwd()
+      end
+
+      local function project_find_files()
+        builtin.find_files {
+          cwd = project_root(),
+          follow = true,
+          hidden = true,
+          no_ignore = false,
+          find_command = {
+            'rg',
+            '--files',
+            '--hidden',
+            '--follow',
+            '--smart-case',
+            '-g',
+            '!.git',
+            '-g',
+            '!.sl',
+            '-g',
+            '!target',
+          },
+        }
+      end
+
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set('n', '<leader>sf', project_find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
